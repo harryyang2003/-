@@ -34,4 +34,8 @@ public interface EmployeeMapper {
 
     //直接创建动态类sql,以后只要是修改,都可以调用这个方法
     void update(Employee employee);
+
+    @Select("select * from employee where id = #{id}")
+    Employee getEmployeeById(String id);
+
 }
