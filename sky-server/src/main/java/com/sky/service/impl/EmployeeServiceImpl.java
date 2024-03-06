@@ -108,5 +108,14 @@ public class EmployeeServiceImpl implements EmployeeService {
         return pr;
     }
 
+    @Override
+    public void status(Integer status, Long id) {
+        Employee employee = new Employee();
+        employee.setStatus(status);
+        employee.setId(id);
+        employeeMapper.update(employee);
+
+    }
+
 
 }

@@ -7,6 +7,7 @@ import com.sky.entity.Employee;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 @Mapper
 public interface EmployeeMapper {
@@ -30,4 +31,7 @@ public interface EmployeeMapper {
     //分页查询
 
     Page<Employee> pageSearch(EmployeePageQueryDTO employeePageQueryDTO);
+
+    //直接创建动态类sql,以后只要是修改,都可以调用这个方法
+    void update(Employee employee);
 }
