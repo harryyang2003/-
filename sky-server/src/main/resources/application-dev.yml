@@ -11,3 +11,11 @@ sky:
     access-key-id: LTAI5tMuPAjCGW4CBK1NF1Mh
     access-key-secret: vVRyXVNUsVzzbpvMZpW4Vdgb8kBTh2
     bucket-name: sky-take-out-project-ywh
+  redis:
+    host: localhost
+    port: 6379
+    auth: 123456
+    database: 10
+  wechat:
+    appid: wxce4782a1d2360d12
+    secret: 86087c78b41174c7cf8fc1ab8d952383
