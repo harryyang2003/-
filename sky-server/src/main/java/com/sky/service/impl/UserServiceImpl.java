@@ -16,6 +16,7 @@ import org.apache.http.client.HttpClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,17 +34,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User wxLogin(UserLoginDTO userLoginDTO) {
-        
-        //调用微信接口服务,获得当前用户openId
-        Map<String, String> map = new HashMap<>();
-        map.put("appid",weChatProperties.getAppid());
-        map.put("secret",weChatProperties.getSecret());
-        map.put("js_code",userLoginDTO.getCode());
-        map.put("grant_type","authorization_code");
-        String json = HttpClientUtil.doGet(WX_LOGIN, map);
 
-        JSONObject jsonObject = JSON.parseObject(json);
-        String openid = jsonObject.getString("openid");
+        String openid = getOpenid(userLoginDTO);
 
         //openid是否为空
         if (openid == null){
@@ -55,11 +47,28 @@ public class UserServiceImpl implements UserService {
 
         //如果是,完成注册
         if(user == null){
-            User.builder()
-                    .openid()
+            user = User.builder()
+                    .openid(openid)
+                    .createTime(LocalDateTime.now())
+                    .build();
+            userMapper.insert(user);
         }
 
         //返回用户对象
-        return null;
+        return user;
+    }
+
+    private String getOpenid(UserLoginDTO userLoginDTO) {
+        //调用微信接口服务,获得当前用户openId
+        Map<String, String> map = new HashMap<>();
+        map.put("appid",weChatProperties.getAppid());
+        map.put("secret",weChatProperties.getSecret());
+        map.put("js_code", userLoginDTO.getCode());
+        map.put("grant_type","authorization_code");
+        String json = HttpClientUtil.doGet(WX_LOGIN, map);
+
+        JSONObject jsonObject = JSON.parseObject(json);
+        String openid = jsonObject.getString("openid");
+        return openid;
     }
 }
